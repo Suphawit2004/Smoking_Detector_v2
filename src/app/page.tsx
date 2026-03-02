@@ -69,7 +69,9 @@ const SystemHeader = ({ isSmoking, isCameraReady, theme }: { isSmoking: boolean,
 const CameraMonitor = ({ theme, system }: any) => (
   <div className={`relative w-full aspect-video bg-black rounded-none overflow-hidden transition-all duration-500 ${system.isSmoking ? 'border-2 border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.4)]' : (theme === "dark" ? 'border border-slate-700 shadow-xl' : 'border border-slate-300 shadow-lg')}`}>
     <div className="absolute top-4 left-4 z-30 pointer-events-none font-mono text-white/80 text-xs drop-shadow-[0_1px_1px_rgba(0,0,0,1)] flex flex-col gap-1">
-      <span>REC 🔴</span><span>CAM: {system.selectedCameraId ? 'EXTERNAL_01' : 'MAIN_FRONT'}</span><span>{new Date().toLocaleTimeString('en-US', { hour12: false })}</span>
+      <span>REC 🔴</span>
+      <span>CAM: {system.selectedCameraId ? 'EXTERNAL_01' : 'MAIN_FRONT'}</span>
+      {/* ❌ นำการโชว์เวลาแบบ Real-time ออกจากตรงนี้แล้ว */}
     </div>
     {!system.isCameraReady && (
       <div className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-slate-900/95 backdrop-blur-sm border border-slate-800">
