@@ -45,7 +45,7 @@ export function useSmokeDetector() {
 
   const [modelSession, setModelSession] = useState<ort.InferenceSession | null>(null);
   const [isCameraReady, setIsCameraReady] = useState(false);
-  const [loadingText, setLoadingText] = useState("⏳ INITIALIZING AI CORE...");
+  const [loadingText, setLoadingText] = useState("⏳ กำลังเริ่มต้นระบบ AI...");
   const [isSmoking, setIsSmoking] = useState(false);
   const [logs, setLogs] = useState<DetectionLog[]>([]);
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
@@ -54,14 +54,14 @@ export function useSmokeDetector() {
   useEffect(() => {
     const initSystem = async () => {
       try {
-        setLoadingText("⏳ LOADING YOLO ONNX MODEL...");
+        setLoadingText("⏳ กำลังโหลดโมเดล YOLO ONNX...");
         (ort.env.wasm as any).wasmPaths = "https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/";
         const session = await ort.InferenceSession.create("/models/yolo_smoking.onnx", { executionProviders: ["wasm"] });
         setModelSession(session);
-        setLoadingText("✨ SYSTEM READY");
+        setLoadingText("✨ ระบบพร้อมใช้งาน");
       } catch (error) {
         console.error("Error loading files:", error);
-        setLoadingText("❌ CRITICAL ERROR: MODEL LOAD FAILED");
+        setLoadingText("❌ ข้อผิดพลาด: ไม่สามารถโหลดโมเดลได้");
       }
 
       const devices = await navigator.mediaDevices.enumerateDevices();
@@ -91,7 +91,7 @@ export function useSmokeDetector() {
         };
       }
     } catch (error) {
-      alert("ACCESS DENIED: ไม่สามารถเข้าถึงกล้องได้ กรุณาตรวจสอบสิทธิ์");
+      alert("การเข้าถึงถูกปฏิเสธ: ไม่สามารถเข้าถึงกล้องได้ กรุณาตรวจสอบสิทธิ์");
     }
   };
 
@@ -108,7 +108,7 @@ export function useSmokeDetector() {
   };
 
   const clearLogs = () => {
-    if (confirm("SYSTEM WARNING: คุณแน่ใจหรือไม่ว่าต้องการล้างประวัติทั้งหมด?")) {
+    if (confirm("คำเตือนจากระบบ: คุณแน่ใจหรือไม่ว่าต้องการล้างประวัติทั้งหมด?")) {
       setLogs([]);
     }
   };
@@ -188,9 +188,9 @@ export function useSmokeDetector() {
             displayCtx.stroke();
 
             displayCtx.fillStyle = box.confidence >= 0.65 ? "#ef4444" : "#f59e0b";
-            displayCtx.fillRect(actualX, actualY - 30, 200, 30);
+            displayCtx.fillRect(actualX, actualY - 30, 220, 30);
             displayCtx.fillStyle = "white"; displayCtx.font = "bold 16px monospace";
-            displayCtx.fillText(`[!] SMOKE DETECTED: ${(box.confidence * 100).toFixed(0)}%`, actualX + 8, actualY - 8);
+            displayCtx.fillText(`[!] พบการสูบบุหรี่: ${(box.confidence * 100).toFixed(0)}%`, actualX + 8, actualY - 8);
           });
 
           const now = Date.now();
@@ -202,7 +202,7 @@ export function useSmokeDetector() {
             snapCtx?.drawImage(videoRef.current, 0, 0);
             if(snapCtx) {
               snapCtx.fillStyle = "rgba(220, 38, 38, 0.8)"; snapCtx.fillRect(10, 10, 250, 40);
-              snapCtx.fillStyle = "white"; snapCtx.font = "bold 18px monospace"; snapCtx.fillText(`INCIDENT LOGGED`, 20, 37);
+              snapCtx.fillStyle = "white"; snapCtx.font = "bold 18px monospace"; snapCtx.fillText(`บันทึกลงฐานข้อมูลแล้ว`, 20, 37);
             }
             setLogs(prev => [{ id: now, time: new Date().toLocaleTimeString('th-TH'), confidence: topBox.confidence, image: snapCanvas.toDataURL("image/jpeg", 0.7) }, ...prev].slice(0, 20)); 
             lastLogTimeRef.current = now;
@@ -211,7 +211,7 @@ export function useSmokeDetector() {
       }
     } catch (e) { console.error(e); }
     requestRef.current = requestAnimationFrame(detectSmoking);
-  }, [modelSession, selectedCameraId]); // dependencies
+  }, [modelSession, selectedCameraId]);
 
   useEffect(() => {
     if (isCameraReady && modelSession) requestRef.current = requestAnimationFrame(detectSmoking);
@@ -219,18 +219,7 @@ export function useSmokeDetector() {
   }, [isCameraReady, modelSession, detectSmoking]);
 
   return {
-    videoRef,
-    canvasRef,
-    isCameraReady,
-    loadingText,
-    isSmoking,
-    logs,
-    cameras,
-    selectedCameraId,
-    setSelectedCameraId,
-    startCamera,
-    stopCamera,
-    clearLogs,
-    isModelReady: !!modelSession
+    videoRef, canvasRef, isCameraReady, loadingText, isSmoking, logs, cameras,
+    selectedCameraId, setSelectedCameraId, startCamera, stopCamera, clearLogs, isModelReady: !!modelSession
   };
 }
