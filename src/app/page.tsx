@@ -41,7 +41,7 @@ export default function Home() {
   const [isSmoking, setIsSmoking] = useState(false);
   const [logs, setLogs] = useState<DetectionLog[]>([]);
 
-  const requestRef = useRef<number>();
+  const requestRef = useRef<number>(0);
   const lastLogTimeRef = useRef<number>(0);
 
   // 1. โหลดโมเดล
