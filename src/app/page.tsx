@@ -293,7 +293,7 @@ export default function Home() {
             <div className={`p-6 rounded-3xl shadow-lg backdrop-blur-md border transition-colors duration-500 flex justify-between items-center ${isSmoking ? 'bg-red-900/40 border-red-500/30' : 'bg-white/80 border-white/50'}`}>
               <div className="flex flex-col">
                 <span className={`text-sm font-bold mb-1 ${isSmoking ? 'text-red-300' : 'text-slate-500'}`}>การควบคุมกล้อง</span>
-                <span className={`text-xs ${isSmoking ? 'text-red-200/70' : 'text-slate-400'}`}>กดเปิดเพื่อเริ่มรันโมเดล AI</span>
+                <span className={`text-xs ${isSmoking ? 'text-red-200/70' : 'text-slate-400'}`}>กดเปิดเพื่อเริ่มรันโมเดล</span>
               </div>
               
               {!isCameraReady ? (
